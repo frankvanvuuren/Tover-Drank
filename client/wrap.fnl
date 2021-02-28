@@ -6,20 +6,15 @@
 
 
 ;; set the first mode
-(var mode (require "mode-intro"))
+(var mode (require "modes/test-mode"))
 
 (fn set-mode [mode-name ...]
   (set mode (require mode-name))
   (when mode.activate
     (mode.activate ...)))
 
-(fn request-connection []
-  (let [thread (love.thread.newThread "connection.lua")]
-    (thread:start)))
-
 (fn love.load []
   (canvas:setFilter "nearest" "nearest")
-  (request-connection)
   (repl.start))
 
 (fn love.draw []
