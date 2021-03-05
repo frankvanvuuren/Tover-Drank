@@ -1,9 +1,12 @@
 (local repl (require "lib.stdio"))
-(local canvas (let [(w h) (love.window.getMode)]
-                (love.graphics.newCanvas w h)))
+(local push (require :deps/push))
 
-(var scale 1)
+(love.graphics.setDefaultFilter "nearest" "nearest")
 
+(local (game-width game-height) (values 256 240))
+(local (window-width window-height) (love.graphics.getDimensions))
+
+(push:setupScreen game-width game-height window-width window-height)
 
 ;; set the first mode
 (var mode (require "modes/test-mode"))
@@ -14,19 +17,14 @@
     (mode.activate ...)))
 
 (fn love.load []
-  (canvas:setFilter "nearest" "nearest")
   (repl.start))
 
 (fn love.draw []
-  ;; the canvas allows you to get sharp pixel-art style scaling; if you
-  ;; don't want that, just skip that and call mode.draw directly.
-  (love.graphics.setCanvas canvas)
+  (push:start)
   (love.graphics.clear)
-  (love.graphics.setColor 1 1 1)
   (mode.draw)
-  (love.graphics.setCanvas)
   (love.graphics.setColor 1 1 1)
-  (love.graphics.draw canvas 0 0 0 scale scale))
+  (push:finish))
 
 (fn love.update [dt]
   (mode.update dt set-mode))

@@ -1,7 +1,5 @@
-(fn mode [...]
-  `(let [tbl# {}]
-    (print ...)
-    (each [index# callback# (ipairs [...])]
-        (print callback#))))
+(fn create-mode [...]
+  (collect [_ [name args & body] (ipairs [...])]
+    (values (tostring name) `(fn ,name ,args ,(unpack body)))))
 
-{:mode mode}
+{:create-mode create-mode}
